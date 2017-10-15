@@ -1,6 +1,6 @@
 import * as logger from "winston";
 
-import { TipsRouter } from "./api/tips";
+import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { DevelopmentConfig, ProductionConfig } from "./config";
 
@@ -22,7 +22,7 @@ const appWrapper = new ApplicationWrapper(config);
 
 appWrapper.configure((app) => {
     logger.debug("Configuring application routes");
-    app.use("/tips", new TipsRouter(config).router);
+    app.use("/tips", new StatusRouter(config).router);
 });
 
 appWrapper.start();
