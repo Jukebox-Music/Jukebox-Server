@@ -22,7 +22,7 @@ const appWrapper = new ApplicationWrapper(config);
 
 appWrapper.configure((app) => {
     logger.debug("Configuring application routes");
-    app.use("/tips", new StatusRouter(config).router);
+    app.use("/status", new StatusRouter(config).router);
 });
 
 appWrapper.start();
