@@ -1,5 +1,6 @@
 import * as logger from "winston";
 
+import { RoomRouter } from "./api/room";
 import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { SocketIOManager } from "./bootstrap/socket-io-manager";
@@ -24,6 +25,7 @@ const appWrapper = new ApplicationWrapper(config);
 appWrapper.configure((app) => {
     logger.debug("Configuring application routes");
     app.use("/status", new StatusRouter(config).router);
+    app.use("/room", new RoomRouter(config).router);
 });
 
 const socketIoManager = new SocketIOManager(appWrapper.Server);
