@@ -2,6 +2,7 @@ import * as logger from "winston";
 
 import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
+import { SocketIOManager } from "./bootstrap/socket-io-manager";
 import { DevelopmentConfig, ProductionConfig } from "./config";
 
 let config;
@@ -25,4 +26,25 @@ appWrapper.configure((app) => {
     app.use("/status", new StatusRouter(config).router);
 });
 
+const socketIoManager = new SocketIOManager(appWrapper.Server);
+
+socketIoManager.configure((io) => {
+    io.on("connection", (socket: SocketIO.Socket) => {
+        socket.on("join", (data) => {
+            logger.info(`User ${socket.client.id} connected`);
+            socket.leaveAll();
+            socket.join(data);
+        });
+
+        socket.on("leave", () => {
+            logger.info(`User ${socket.client.id} left`);
+        });
+
+        socket.on("disconnect", (data) => {
+            logger.info(`User ${socket.client.id} disconnected. Destroying all services assigned to this user`);
+        });
+    });
+});
+
 appWrapper.start();
+socketIoManager.start();
