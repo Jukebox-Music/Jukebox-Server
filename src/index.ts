@@ -30,6 +30,8 @@ appWrapper.configure((app) => {
 
 const socketIoManager = new SocketIOManager(appWrapper.Server);
 
+socketIoManager.start();
+
 socketIoManager.configure((io) => {
     io.on("connection", (socket: SocketIO.Socket) => {
         socket.on("join", (data) => {
@@ -49,4 +51,3 @@ socketIoManager.configure((io) => {
 });
 
 appWrapper.start();
-socketIoManager.start();
