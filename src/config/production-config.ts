@@ -3,4 +3,7 @@ export const ProductionConfig: IConfig = {
     client: {
         url: "https://jukebox-music.github.io/Jukebox-Client",
     },
+    youtube: {
+        apiKey: process.env.YOUTUBE_API_KEY,
+    },
 };

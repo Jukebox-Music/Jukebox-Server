@@ -3,4 +3,7 @@ export const DevelopmentConfig: IConfig = {
     client: {
         url: "http://localhost:4200",
     },
+    youtube: {
+        apiKey: process.env.YOUTUBE_API_KEY,
+    },
 };

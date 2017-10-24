@@ -3,4 +3,7 @@ interface IConfig {
     client: {
         url: string,
     };
+    youtube: {
+        apiKey: string,
+    };
 }
