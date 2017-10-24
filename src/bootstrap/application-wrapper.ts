@@ -1,5 +1,6 @@
 import * as bodyParser from "body-parser";
 import * as compression from "compression";
+import * as cors from "cors";
 import * as express from "express";
 import * as session from "express-session";
 import * as http from "http";
@@ -12,12 +13,8 @@ export class ApplicationWrapper {
 
     constructor(private config: IConfig) {
         this.app = express();
+        this.app.use(cors({credentials: true, origin: config.client.url}));
 
-        this.app.use((req, res, next) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-        });
         this.app.use(compression());
         this.app.use(bodyParser.urlencoded({ extended: false }));
         this.app.use(bodyParser.json());
