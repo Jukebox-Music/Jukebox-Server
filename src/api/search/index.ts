@@ -35,7 +35,7 @@ export class SearchRouter {
                     return _.pick(result, ["link", "title", "thumbnails", "description"]);
                 });
 
-                res.status(200).send(output);
+                res.status(200).json(output);
             });
         });
     }
