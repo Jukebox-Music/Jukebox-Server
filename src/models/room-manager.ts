@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 import { Room } from "./room";
 
 export class RoomManager {
@@ -11,5 +13,11 @@ export class RoomManager {
         }
 
         this.socketRooms[roomName].room = new Room();
+    }
+
+    public get Rooms(): void {
+        return _.pickBy(this.socketRooms, (value) => {
+            return value.room;
+        });
     }
 }
