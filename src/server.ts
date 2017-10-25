@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import * as logger from "winston";
 
 import { RoomManager } from "./models/room-manager";
@@ -13,13 +12,15 @@ export class SocketServer {
     public start(): void {
         this.io.on("connection", (socket: SocketIO.Socket) => {
             logger.info(`User ${socket.client.id} connected`);
-            socket.emit("rooms", _.values(this.roomManager.Rooms));
+            socket.emit("rooms", this.roomManager.Rooms);
+            console.log(this.roomManager.Rooms);
 
             socket.on("join", (roomName) => {
                 logger.info(`User ${socket.client.id} is attempting to join room ${roomName}`);
                 socket.leaveAll();
                 socket.join(roomName);
                 this.roomManager.addRoomIfNotExists(roomName);
+                this.io.emit("rooms", this.roomManager.Rooms);
             });
 
             socket.on("leave", () => {
