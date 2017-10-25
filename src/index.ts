@@ -6,6 +6,7 @@ import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { SocketIOManager } from "./bootstrap/socket-io-manager";
 import { DevelopmentConfig, ProductionConfig } from "./config";
+import { SocketServer } from "./server";
 
 let config;
 
@@ -35,21 +36,8 @@ const socketIoManager = new SocketIOManager(appWrapper.Server);
 socketIoManager.start();
 
 socketIoManager.configure((io) => {
-    io.on("connection", (socket: SocketIO.Socket) => {
-        socket.on("join", (data) => {
-            logger.info(`User ${socket.client.id} connected`);
-            socket.leaveAll();
-            socket.join(data);
-        });
-
-        socket.on("leave", () => {
-            logger.info(`User ${socket.client.id} left`);
-        });
-
-        socket.on("disconnect", (data) => {
-            logger.info(`User ${socket.client.id} disconnected. Destroying all services assigned to this user`);
-        });
-    });
+    const socketServer = new SocketServer(io);
+    socketServer.start();
 });
 
 appWrapper.start();
