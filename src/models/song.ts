@@ -1,5 +1,3 @@
-import { SongData } from "./song-data";
-
 export class Song {
     private seek: number;
 

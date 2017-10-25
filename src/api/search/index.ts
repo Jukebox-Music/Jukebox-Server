@@ -31,8 +31,6 @@ export class SearchRouter {
                     return res.status(400).send(err);
                 }
 
-                console.log(results);
-
                 const output = results.map((result) => {
                     return _.pick(result, ["link", "title", "thumbnails", "description"]);
                 });

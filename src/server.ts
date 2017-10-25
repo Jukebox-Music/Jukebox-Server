@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import * as logger from "winston";
 
 import { RoomManager } from "./models/room-manager";
@@ -21,6 +22,12 @@ export class SocketServer {
                 socket.join(roomName);
                 this.roomManager.addRoomIfNotExists(roomName);
                 this.io.emit("rooms", this.roomManager.Rooms);
+            });
+
+            socket.on("add-song", (data) => {
+                logger.info(`User ${socket.client.id} is adding song to room`);
+                console.log(socket.rooms);
+                this.roomManager.addSong(_.keys(socket.rooms)[0], data);
             });
 
             socket.on("leave", () => {
