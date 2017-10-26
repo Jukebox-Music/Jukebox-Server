@@ -49,3 +49,5 @@ dist
 # Local environment variables
 run.bat
 run.sh
+
+.env

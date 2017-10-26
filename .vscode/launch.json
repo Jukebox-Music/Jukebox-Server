@@ -12,12 +12,10 @@
             ],
             "protocol": "inspector",
             "port": 9229,
-            "windows": {
-                "runtimeExecutable": "npm.cmd"
-            },
             "linux": {
                 "runtimeExecutable": "npm"
-            }
+            },
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }
