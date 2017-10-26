@@ -15,14 +15,13 @@ export class SocketServer {
         this.io.on("connection", (socket: SocketIO.Socket) => {
             logger.info(`User ${socket.client.id} connected`);
             socket.emit("rooms", this.roomManager.Rooms);
-            console.log(this.roomManager.Rooms);
 
             socket.on("join", (roomName: string) => {
                 logger.info(`User ${socket.client.id} is attempting to join room ${roomName}`);
                 socket.leaveAll();
                 socket.join(roomName);
                 this.roomManager.addRoomIfNotExists(roomName);
-                this.sendUpdateToRoom(roomName);
+                this.sendUpdateToAllRooms();
             });
 
             socket.on("add-song", (data: SongData) => {
@@ -37,15 +36,21 @@ export class SocketServer {
 
             socket.on("leave", () => {
                 logger.info(`User ${socket.client.id} left`);
+                this.sendUpdateToAllRooms();
             });
 
             socket.on("disconnect", (data) => {
                 logger.info(`User ${socket.client.id} disconnected. Destroying all services assigned to this user`);
+                this.sendUpdateToAllRooms();
             });
         });
     }
 
     private sendUpdateToRoom(roomName: string): void {
         this.io.in(roomName).emit("room", this.roomManager.Rooms[roomName]);
+    }
+
+    private sendUpdateToAllRooms(): void {
+        this.io.emit("rooms", this.roomManager.Rooms);
     }
 }
