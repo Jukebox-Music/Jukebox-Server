@@ -21,13 +21,17 @@ export class SocketServer {
                 socket.leaveAll();
                 socket.join(roomName);
                 this.roomManager.addRoomIfNotExists(roomName);
-                this.io.emit("rooms", this.roomManager.Rooms);
+                this.sendUpdateToRoom(roomName);
             });
 
             socket.on("add-song", (data) => {
                 logger.info(`User ${socket.client.id} is adding song to room`);
                 console.log(socket.rooms);
+                const roomName = _.keys(socket.rooms)[0];
+                console.log(roomName);
+
                 this.roomManager.addSong(_.keys(socket.rooms)[0], data);
+                this.sendUpdateToRoom(roomName);
             });
 
             socket.on("leave", () => {
@@ -38,5 +42,9 @@ export class SocketServer {
                 logger.info(`User ${socket.client.id} disconnected. Destroying all services assigned to this user`);
             });
         });
+    }
+
+    private sendUpdateToRoom(roomName: string): void {
+        this.io.in(roomName).emit("room", this.roomManager.Rooms[roomName]);
     }
 }
