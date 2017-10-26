@@ -28,8 +28,8 @@ export class SocketServer {
             socket.on("add-song", (data: SongData) => {
                 logger.info(`User ${socket.client.id} is adding song to room`);
                 const roomName = _.keys(socket.rooms)[0];
-                this.songDictionary.save(data.link).then(() => {
-                    this.roomManager.addSong(_.keys(socket.rooms)[0], data);
+                this.songDictionary.save(data.link).then((result) => {
+                    this.roomManager.addSong(_.keys(socket.rooms)[0], data, result);
                     this.sendUpdateToRoom(roomName);
                 });
 
