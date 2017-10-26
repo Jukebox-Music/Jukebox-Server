@@ -15,9 +15,9 @@ export class SongRouter {
     }
 
     public init(): void {
-        this.router.get("/", (req: Request, res: Response) => {
+        this.router.post("/add", (req: Request, res: Response) => {
             logger.debug("Getting song");
-            const songUrl = req.query.url as string;
+            const songUrl = req.params.url as string;
             this.songDictionary.load(songUrl).then((result) => {
                 res.status(200).download(result.path, "song.mp3");
             });

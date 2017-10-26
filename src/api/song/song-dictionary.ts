@@ -17,6 +17,9 @@ export class SongDictionary {
             Promise.all([!!this.songs.get(link), this.checkIfFileExits(link)]).then((result) => {
                 const [inMap, exists] = result;
 
+                console.log(inMap);
+                console.log(exists);
+
                 if (!inMap || !exists) {
                     this.downloader.download(link).then((downloadResult) => {
                         this.songs.set(link, downloadResult);
@@ -29,13 +32,15 @@ export class SongDictionary {
         });
     }
 
-    private checkIfFileExits(path: string): Promise<boolean> {
+    private checkIfFileExits(fileName: string): Promise<boolean> {
         return new Promise<boolean>((resolve, reject) => {
-            fs.stat(path, (err, stat) => {
+            fs.stat(fileName, (err, stat) => {
                 if (!err) {
                     resolve(true);
                     return;
                 }
+
+                console.log(err);
 
                 if (err.code === "ENOENT") {
                     // File does not exist

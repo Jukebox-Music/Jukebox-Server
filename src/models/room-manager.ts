@@ -10,6 +10,7 @@ interface ISocketRooms {
         },
         length: number,
         room?: Room,
+        name?: string;
     };
 }
 
@@ -33,8 +34,15 @@ export class RoomManager {
     }
 
     public get Rooms(): ISocketRooms {
-        return _.pickBy(this.socketRooms, (value) => {
+        const validRooms = _.pickBy(this.socketRooms, (value) => {
             return value.room;
         });
+
+        const roomsWithName = _.mapValues(validRooms, (value, key) => {
+            value.name = key;
+            return value;
+        });
+
+        return roomsWithName;
     }
 }
