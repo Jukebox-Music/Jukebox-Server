@@ -1,9 +1,7 @@
 import * as logger from "winston";
 
-import { RoomRouter } from "./api/room";
 import { SearchRouter } from "./api/search";
 import { SongRouter } from "./api/song";
-import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { SocketIOManager } from "./bootstrap/socket-io-manager";
 import { DevelopmentConfig, ProductionConfig } from "./config";
@@ -30,8 +28,6 @@ const songDictionary = new SongDictionary();
 
 appWrapper.configure((app) => {
     logger.debug("Configuring application routes");
-    app.use("/status", new StatusRouter(config).router);
-    app.use("/room", new RoomRouter(config).router);
     app.use("/search", new SearchRouter(config).router);
     app.use("/song", new SongRouter(config, songDictionary).router);
 });
