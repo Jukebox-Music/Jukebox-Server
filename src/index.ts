@@ -8,6 +8,7 @@ import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { SocketIOManager } from "./bootstrap/socket-io-manager";
 import { DevelopmentConfig, ProductionConfig } from "./config";
 import { SocketServer } from "./server";
+import { SongDictionary } from "./song-dictionary";
 
 let config;
 
@@ -25,12 +26,14 @@ switch (process.env.NODE_ENV) {
 
 const appWrapper = new ApplicationWrapper(config);
 
+const songDictionary = new SongDictionary();
+
 appWrapper.configure((app) => {
     logger.debug("Configuring application routes");
     app.use("/status", new StatusRouter(config).router);
     app.use("/room", new RoomRouter(config).router);
     app.use("/search", new SearchRouter(config).router);
-    app.use("/song", new SongRouter(config).router);
+    app.use("/song", new SongRouter(config, songDictionary).router);
 });
 
 const socketIoManager = new SocketIOManager(appWrapper.Server);
@@ -38,7 +41,7 @@ const socketIoManager = new SocketIOManager(appWrapper.Server);
 socketIoManager.start();
 
 socketIoManager.configure((io) => {
-    const socketServer = new SocketServer(io);
+    const socketServer = new SocketServer(io, songDictionary);
     socketServer.start();
 });
 

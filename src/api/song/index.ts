@@ -1,15 +1,13 @@
 import { Request, Response, Router } from "express";
 import * as logger from "winston";
 
-import { SongDictionary } from "./song-dictionary";
+import { SongDictionary } from "../../song-dictionary";
 
 export class SongRouter {
     public router: Router;
-    private songDictionary: SongDictionary;
 
-    constructor(config: IConfig) {
+    constructor(config: IConfig, private songDictionary: SongDictionary) {
         this.router = Router();
-        this.songDictionary = new SongDictionary();
 
         this.init();
     }
@@ -17,9 +15,11 @@ export class SongRouter {
     public init(): void {
         this.router.get("/", (req: Request, res: Response) => {
             logger.debug("Getting song");
-            const songUrl = req.query.url as string;
-            this.songDictionary.load(songUrl).then((result) => {
+            const songId = req.query.id as string;
+            this.songDictionary.load(songId).then((result) => {
                 res.status(200).download(result.path, "song.mp3");
+            }).catch(() => {
+                res.status(400).send();
             });
         });
     }
