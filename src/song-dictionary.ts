@@ -1,10 +1,9 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-
 import { DownloadResults } from "pully";
 
-import { SongDownloader } from "./song-downloader";
+import { SongDownloader } from "./api/song/song-downloader";
 
 export class SongDictionary {
     private downloader: SongDownloader;
