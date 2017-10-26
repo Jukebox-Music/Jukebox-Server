@@ -2,6 +2,7 @@ import * as logger from "winston";
 
 import { RoomRouter } from "./api/room";
 import { SearchRouter } from "./api/search";
+import { SongRouter } from "./api/song";
 import { StatusRouter } from "./api/status";
 import { ApplicationWrapper } from "./bootstrap/application-wrapper";
 import { SocketIOManager } from "./bootstrap/socket-io-manager";
@@ -29,6 +30,7 @@ appWrapper.configure((app) => {
     app.use("/status", new StatusRouter(config).router);
     app.use("/room", new RoomRouter(config).router);
     app.use("/search", new SearchRouter(config).router);
+    app.use("/song", new SongRouter(config).router);
 });
 
 const socketIoManager = new SocketIOManager(appWrapper.Server);
