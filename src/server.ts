@@ -22,6 +22,7 @@ export class SocketServer {
                 socket.join(roomName);
                 this.roomManager.addRoomIfNotExists(roomName);
                 this.sendUpdateToAllRooms();
+                this.sendUpdateToRoom(roomName);
             });
 
             socket.on("add-song", (data: SongData) => {
