@@ -13,6 +13,12 @@ export class Song {
         // TODO
     }
 
+    public adjustSeek(amount: number): number {
+        this.seek += amount;
+
+        return this.seek;
+    }
+
     public get Data(): SongData {
         return this.data;
     }
@@ -23,5 +29,9 @@ export class Song {
 
     public get Duration(): number {
         return this.duration;
+    }
+
+    public get Finished(): boolean {
+        return this.seek > this.duration;
     }
 }

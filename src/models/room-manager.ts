@@ -25,6 +25,7 @@ export class RoomManager {
         }
 
         this.socketRooms[roomName].room = new Room();
+        this.socketRooms[roomName].room.start();
     }
 
     public addSong(roomName: string, data: SongData, pullyData: IPullyData): void {
@@ -43,6 +44,12 @@ export class RoomManager {
             return value;
         });
 
-        return roomsWithName;
+        const roomsWithoutTimer = _.mapValues(roomsWithName, (value, key) => {
+            // tslint:disable-next-line:no-any
+            (value.room as any).timer = undefined;
+            return value;
+        });
+
+        return roomsWithoutTimer;
     }
 }
