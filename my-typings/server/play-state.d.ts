@@ -1,1 +1,1 @@
-type PlayState = "play" | "pause" | "stop";
+type PlayState = "play" | "pause";

@@ -34,6 +34,12 @@ export class RoomManager {
         room.addSong(new Song(data, pullyData.id, pullyData.duration));
     }
 
+    public updateState(roomName: string, state: SongState): void {
+        const room = this.socketRooms[roomName].room as Room;
+
+        room.updateState(state);
+    }
+
     public get Rooms(): ISocketRooms {
         const validRooms = _.pickBy(this.socketRooms, (value) => {
             return value.room;

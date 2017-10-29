@@ -34,4 +34,8 @@ export class Song {
     public get Finished(): boolean {
         return this.seek > this.duration;
     }
+
+    public set Seek(seek: number) {
+        this.seek = seek;
+    }
 }

@@ -7,7 +7,7 @@ export class Room {
 
     constructor() {
         this.songs = [];
-        this.playState = "stop";
+        this.playState = "pause";
     }
 
     public start(): void {
@@ -43,8 +43,9 @@ export class Room {
         this.playState = "pause";
     }
 
-    public stop(): void {
-        this.playState = "stop";
+    public updateState(state: SongState): void {
+        this.playState = state.type;
+        this.CurrentSong.Seek = state.seek;
     }
 
     public removeSong(id: string): void {

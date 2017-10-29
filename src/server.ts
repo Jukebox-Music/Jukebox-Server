@@ -27,12 +27,18 @@ export class SocketServer {
 
             socket.on("add-song", (data: SongData) => {
                 logger.info(`User ${socket.client.id} is adding song to room`);
-                const roomName = _.keys(socket.rooms)[0];
+                const roomName = this.getRoomName(socket);
+
                 this.songDictionary.save(data.link).then((result) => {
-                    this.roomManager.addSong(_.keys(socket.rooms)[0], data, result);
+                    this.roomManager.addSong(roomName, data, result);
                     this.sendUpdateToRoom(roomName);
                 });
+            });
 
+            socket.on("song-state", (data: SongState) => {
+                const roomName = this.getRoomName(socket);
+
+                this.roomManager.updateState(roomName, data);
             });
 
             socket.on("leave", () => {
@@ -53,5 +59,9 @@ export class SocketServer {
 
     private sendUpdateToAllRooms(): void {
         this.io.emit("rooms", this.roomManager.Rooms);
+    }
+
+    private getRoomName(socket: SocketIO.Socket): string {
+        return _.keys(socket.rooms)[0];
     }
 }
