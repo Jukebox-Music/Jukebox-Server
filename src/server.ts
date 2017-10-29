@@ -39,6 +39,7 @@ export class SocketServer {
                 const roomName = this.getRoomName(socket);
 
                 this.roomManager.updateState(roomName, data);
+                this.sendUpdateToRoom(roomName);
             });
 
             socket.on("leave", () => {

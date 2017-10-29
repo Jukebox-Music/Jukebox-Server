@@ -45,6 +45,11 @@ export class Room {
 
     public updateState(state: SongState): void {
         this.playState = state.type;
+
+        if (!this.CurrentSong) {
+            return;
+        }
+
         this.CurrentSong.Seek = state.seek;
     }
 
