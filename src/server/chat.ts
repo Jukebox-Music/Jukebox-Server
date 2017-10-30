@@ -5,7 +5,7 @@ export class ChatServer {
     }
 
     public init(socket: SocketIO.Socket): void {
-        socket.on("chat", (message) => {
+        socket.on("chat-request", (message) => {
             const roomName = Utility.getRoomName(socket);
 
             this.sendUpdateToRoom(roomName, message);
@@ -13,6 +13,6 @@ export class ChatServer {
     }
 
     private sendUpdateToRoom(roomName: string, chatMessage: ChatMessage): void {
-        this.io.in(roomName).emit("room", chatMessage);
+        this.io.in(roomName).emit("chat-response", chatMessage);
     }
 }
