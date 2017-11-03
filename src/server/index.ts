@@ -4,6 +4,7 @@ import { RoomManager } from "../models/room-manager";
 import { SongDictionary } from "../song-dictionary";
 import { ChatServer } from "./chat";
 import { SongServer } from "./song";
+import { UserServer } from "./user";
 
 export class SocketServer {
     private roomManager: RoomManager;
@@ -13,7 +14,7 @@ export class SocketServer {
     }
 
     public start(): void {
-        this.io.on("connection", (socket: SocketIO.Socket) => {
+        this.io.on("connection", (socket: JukeboxSocket) => {
             logger.info(`User ${socket.client.id} connected`);
             socket.emit("rooms", this.roomManager.Rooms);
 
@@ -22,6 +23,9 @@ export class SocketServer {
 
             const song = new SongServer(this.io, this.songDictionary, this.roomManager);
             song.init(socket);
+
+            const profile = new UserServer();
+            profile.init(socket);
 
             socket.on("leave", () => {
                 logger.info(`User ${socket.client.id} left`);

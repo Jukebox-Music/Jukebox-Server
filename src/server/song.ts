@@ -8,7 +8,7 @@ export class SongServer {
     constructor(private io: SocketIO.Server, private songDictionary: SongDictionary, private roomManager: RoomManager) {
     }
 
-    public init(socket: SocketIO.Socket): void {
+    public init(socket: JukeboxSocket): void {
         socket.on("join", (roomName: string) => {
             logger.info(`User ${socket.client.id} is attempting to join room ${roomName}`);
             socket.leaveAll();
