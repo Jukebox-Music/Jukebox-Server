@@ -24,8 +24,8 @@ export class SocketServer {
             const song = new SongServer(this.io, this.songDictionary, this.roomManager);
             song.init(socket);
 
-            const profile = new UserServer();
-            profile.init(socket);
+            const user = new UserServer();
+            user.init(socket);
 
             socket.on("leave", () => {
                 logger.info(`User ${socket.client.id} left`);
