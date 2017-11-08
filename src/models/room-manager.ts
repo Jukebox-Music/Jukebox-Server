@@ -31,11 +31,19 @@ export class RoomManager {
     public addSong(roomName: string, data: SongData, id: string): void {
         const room = this.socketRooms[roomName].room as Room;
 
+        if (!room) {
+            return;
+        }
+
         room.addSong(new Song(data, id, data.duration));
     }
 
     public updateState(roomName: string, state: SongState): void {
         const room = this.socketRooms[roomName].room as Room;
+
+        if (!room) {
+            return;
+        }
 
         room.updateState(state);
     }
