@@ -89,7 +89,7 @@ export class SearchRouter {
     }
 
     private getSecondsFromYoutubeTime(youtubeTime: string): number {
-        const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/ig;
+        const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/ig;
 
         const [, hour, minute, seconds] = regex.exec(youtubeTime);
 
