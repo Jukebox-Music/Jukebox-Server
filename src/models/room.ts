@@ -11,7 +11,7 @@ export class Room {
     }
 
     public start(): void {
-        const resolution = 500;
+        const resolution = 1000;
         this.timer = setInterval(() => {
             if (this.playState === "play") {
                 if (!this.CurrentSong) {
