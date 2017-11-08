@@ -15,7 +15,7 @@ export class SongServer {
             socket.join(roomName);
             this.roomManager.addRoomIfNotExists(roomName);
             this.roomManager.emitToAll();
-            this.roomManager.Rooms[roomName].room.emitUpdate();
+            this.roomManager.emitUpdate(roomName);
         });
 
         socket.on("add-song", (data: SongData) => {
@@ -23,9 +23,9 @@ export class SongServer {
             const roomName = Utility.getRoomName(socket);
 
             this.songDictionary.save(data.link).then((id) => {
-                this.roomManager.addSong(roomName, data, id);
-                this.roomManager.Rooms[roomName].room.emitUpdate();
                 logger.info(`User ${socket.client.id} is added song to room`);
+                this.roomManager.addSong(roomName, data, id);
+                this.roomManager.emitUpdate(roomName);
             });
         });
 
@@ -33,7 +33,7 @@ export class SongServer {
             const roomName = Utility.getRoomName(socket);
 
             this.roomManager.updateState(roomName, data);
-            this.roomManager.Rooms[roomName].room.emitUpdate();
+            this.roomManager.emitUpdate(roomName);
         });
     }
 }

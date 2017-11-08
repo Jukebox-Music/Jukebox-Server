@@ -29,7 +29,7 @@ export class RoomManager {
     }
 
     public addSong(roomName: string, data: SongData, id: string): void {
-        const room = this.socketRooms[roomName].room as Room;
+        const room = this.getRoom(roomName);
 
         if (!room) {
             return;
@@ -39,7 +39,7 @@ export class RoomManager {
     }
 
     public updateState(roomName: string, state: SongState): void {
-        const room = this.socketRooms[roomName].room as Room;
+        const room = this.getRoom(roomName);
 
         if (!room) {
             return;
@@ -50,6 +50,20 @@ export class RoomManager {
 
     public emitToAll(): void {
         this.io.emit("rooms", this.JsonRooms);
+    }
+
+    public emitUpdate(roomName: string): void {
+        const room = this.getRoom(roomName);
+
+        if (!room) {
+            return;
+        }
+
+        room.emitUpdate();
+    }
+
+    private getRoom(roomName: string): Room {
+        return this.Rooms[roomName].room as Room;
     }
 
     public get Rooms(): ISocketRooms {
