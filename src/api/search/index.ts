@@ -35,7 +35,9 @@ export class SearchRouter {
                     return _.pick(result, ["link", "title", "thumbnails", "description", "duration"]) as SongData;
                 });
 
-                res.status(200).json(output);
+                const shortVideos = output.filter((video) => video.duration < 600);
+
+                res.status(200).json(shortVideos);
             } catch (err) {
                 res.status(500).send(err);
             }
