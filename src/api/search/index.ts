@@ -77,7 +77,7 @@ export class SearchRouter {
                 _.forEach(body.items, (r) => {
                     const video = _.find(videoResults, { id: r.id }) as IExtendedYouTubeSearchResult;
                     if (r.id) {
-                        video.duration = this.getMillisFromYoutubeTime(r.contentDetails.duration);
+                        video.duration = this.getSecondsFromYoutubeTime(r.contentDetails.duration);
 
                         finalSearchResults.push(video);
                     }
@@ -88,14 +88,14 @@ export class SearchRouter {
         });
     }
 
-    private getMillisFromYoutubeTime(youtubeTime: string): number {
+    private getSecondsFromYoutubeTime(youtubeTime: string): number {
         const regex = /PT(?:(\d+)H)?(?:(\d+)M)?(\d+)S/ig;
 
         const [, hour, minute, seconds] = regex.exec(youtubeTime);
 
-        const hourMillis = hour ? parseInt(hour, 10) * 60 * 60 * 1000 : 0;
-        const minuteMillis = minute ? parseInt(minute, 10) * 60 * 1000 : 0;
-        const secondMillis = seconds ? parseInt(seconds, 10) * 1000 : 0;
+        const hourMillis = hour ? parseInt(hour, 10) * 60 * 60 : 0;
+        const minuteMillis = minute ? parseInt(minute, 10) * 60 : 0;
+        const secondMillis = seconds ? parseInt(seconds, 10) : 0;
 
         return hourMillis + minuteMillis + secondMillis;
     }

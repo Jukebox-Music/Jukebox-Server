@@ -18,7 +18,7 @@ export class Room {
                     return;
                 }
 
-                this.CurrentSong.adjustSeek(resolution);
+                this.CurrentSong.adjustSeek(resolution / 1000);
 
                 if (this.CurrentSong.Finished) {
                     console.log(`${this.CurrentSong.Data.title} finished playing`);
