@@ -68,6 +68,11 @@ export class Room {
 
     public nextSong(): void {
         this.songs.shift();
+
+        if (this.songs.length === 0) {
+            this.playState = "pause";
+        }
+
         this.emitUpdate();
     }
 
