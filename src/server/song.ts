@@ -22,9 +22,10 @@ export class SongServer {
             logger.info(`User ${socket.client.id} is adding song to room`);
             const roomName = Utility.getRoomName(socket);
 
-            this.songDictionary.save(data.link).then((result) => {
-                this.roomManager.addSong(roomName, data, result);
+            this.songDictionary.save(data.link).then((id) => {
+                this.roomManager.addSong(roomName, data, id);
                 this.sendUpdateToRoom(roomName);
+                logger.info(`User ${socket.client.id} is added song to room`);
             });
         });
 

@@ -29,6 +29,7 @@ export class SocketServer {
 
             socket.on("leave", () => {
                 logger.info(`User ${socket.client.id} left`);
+                socket.leaveAll();
                 this.sendUpdateToAllRooms();
             });
 

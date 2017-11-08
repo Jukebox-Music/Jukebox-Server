@@ -29,16 +29,13 @@ export class SongDictionary {
         });
     }
 
-    public save(url: string): Promise<IPullyData> {
-        return new Promise<IPullyData>((resolve, reject) => {
+    public save(url: string): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
             this.downloader.download(url).then((downloadResult) => {
                 const id = path.basename(downloadResult.path, ".mp3");
 
                 this.songs.set(id, downloadResult);
-                resolve({
-                    duration: downloadResult.duration,
-                    id: id,
-                });
+                resolve(id);
             });
         });
     }

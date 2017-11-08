@@ -28,10 +28,10 @@ export class RoomManager {
         this.socketRooms[roomName].room.start();
     }
 
-    public addSong(roomName: string, data: SongData, pullyData: IPullyData): void {
+    public addSong(roomName: string, data: SongData, id: string): void {
         const room = this.socketRooms[roomName].room as Room;
 
-        room.addSong(new Song(data, pullyData.id, pullyData.duration));
+        room.addSong(new Song(data, id, data.duration));
     }
 
     public updateState(roomName: string, state: SongState): void {

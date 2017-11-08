@@ -13,4 +13,5 @@ interface SongData {
         high: SongDataThumbnail,
     };
     description: string;
+    duration: number;
 }

@@ -13,10 +13,8 @@ export class Song {
         // TODO
     }
 
-    public adjustSeek(amount: number): number {
+    public adjustSeek(amount: number): void {
         this.seek += amount;
-
-        return this.seek;
     }
 
     public get Data(): SongData {
