@@ -11,20 +11,9 @@ export class Room {
     }
 
     public start(): void {
-        const resolution = 1000;
+        const resolution = 100;
         this.timer = setInterval(() => {
-            if (this.playState === "play") {
-                if (!this.CurrentSong) {
-                    return;
-                }
-
-                this.CurrentSong.adjustSeek(resolution / 1000);
-
-                if (this.CurrentSong.Finished) {
-                    console.log(`${this.CurrentSong.Data.title} finished playing`);
-                    this.nextSong();
-                }
-            }
+            this.update(resolution);
         }, resolution);
     }
 
@@ -74,6 +63,21 @@ export class Room {
         }
 
         this.emitUpdate();
+    }
+
+    private update(resolution: number): void {
+        if (this.playState === "play") {
+            if (!this.CurrentSong) {
+                return;
+            }
+
+            this.CurrentSong.adjustSeek(resolution / 1000);
+
+            if (this.CurrentSong.Finished) {
+                console.log(`${this.CurrentSong.Data.title} finished playing`);
+                this.nextSong();
+            }
+        }
     }
 
     private get CurrentSong(): Song {
