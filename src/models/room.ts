@@ -5,7 +5,7 @@ export class Room {
     private playState: PlayState;
     private timer: NodeJS.Timer;
 
-    constructor() {
+    constructor(private name: string, private io: SocketIO.Server) {
         this.songs = [];
         this.playState = "pause";
     }
@@ -54,12 +54,21 @@ export class Room {
         this.CurrentSong.Seek = state.seek;
     }
 
+    public emitUpdate(): void {
+        this.io.in(this.name).emit("room", {
+            songs: this.songs,
+            playState: this.playState,
+            name: this.name,
+        });
+    }
+
     public removeSong(id: string): void {
         // TODO
     }
 
     public nextSong(): void {
         this.songs.shift();
+        this.emitUpdate();
     }
 
     private get CurrentSong(): Song {

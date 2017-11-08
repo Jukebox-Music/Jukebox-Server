@@ -5,7 +5,7 @@ import { SongDictionary } from "../song-dictionary";
 import { Utility } from "./utility";
 
 export class SongServer {
-    constructor(private io: SocketIO.Server, private songDictionary: SongDictionary, private roomManager: RoomManager) {
+    constructor(private songDictionary: SongDictionary, private roomManager: RoomManager) {
     }
 
     public init(socket: JukeboxSocket): void {
@@ -14,8 +14,8 @@ export class SongServer {
             socket.leaveAll();
             socket.join(roomName);
             this.roomManager.addRoomIfNotExists(roomName);
-            this.sendUpdateToAllRooms();
-            this.sendUpdateToRoom(roomName);
+            this.roomManager.emitToAll();
+            this.roomManager.Rooms[roomName].room.emitUpdate();
         });
 
         socket.on("add-song", (data: SongData) => {
@@ -24,7 +24,7 @@ export class SongServer {
 
             this.songDictionary.save(data.link).then((id) => {
                 this.roomManager.addSong(roomName, data, id);
-                this.sendUpdateToRoom(roomName);
+                this.roomManager.Rooms[roomName].room.emitUpdate();
                 logger.info(`User ${socket.client.id} is added song to room`);
             });
         });
@@ -33,15 +33,7 @@ export class SongServer {
             const roomName = Utility.getRoomName(socket);
 
             this.roomManager.updateState(roomName, data);
-            this.sendUpdateToRoom(roomName);
+            this.roomManager.Rooms[roomName].room.emitUpdate();
         });
-    }
-
-    private sendUpdateToRoom(roomName: string): void {
-        this.io.in(roomName).emit("room", this.roomManager.Rooms[roomName]);
-    }
-
-    private sendUpdateToAllRooms(): void {
-        this.io.emit("rooms", this.roomManager.Rooms);
     }
 }

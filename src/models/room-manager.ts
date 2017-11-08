@@ -16,7 +16,7 @@ interface ISocketRooms {
 
 export class RoomManager {
 
-    constructor(private socketRooms: ISocketRooms) {
+    constructor(private socketRooms: ISocketRooms, private io: SocketIO.Server) {
     }
 
     public addRoomIfNotExists(roomName: string): void {
@@ -24,7 +24,7 @@ export class RoomManager {
             return;
         }
 
-        this.socketRooms[roomName].room = new Room();
+        this.socketRooms[roomName].room = new Room(roomName, this.io);
         this.socketRooms[roomName].room.start();
     }
 
@@ -48,22 +48,31 @@ export class RoomManager {
         room.updateState(state);
     }
 
+    public emitToAll(): void {
+        this.io.emit("rooms", this.JsonRooms);
+    }
+
     public get Rooms(): ISocketRooms {
-        const validRooms = _.pickBy(this.socketRooms, (value) => {
+        return _.pickBy(this.socketRooms, (value) => {
             return value.room;
         });
-
-        const roomsWithName = _.mapValues(validRooms, (value, key) => {
-            value.name = key;
-            return value;
-        });
-
-        const roomsWithoutTimer = _.mapValues(roomsWithName, (value, key) => {
-            // tslint:disable-next-line:no-any
-            (value.room as any).timer = undefined;
-            return value;
-        });
-
-        return roomsWithoutTimer;
     }
+
+    // tslint:disable:no-any
+    public get JsonRooms(): any {
+        const validRooms = this.Rooms;
+
+        return _.mapValues(validRooms, (value, key) => {
+            return {
+                sockets: value.sockets,
+                length: value.length,
+                room: {
+                    songs: (value.room as any).songs,
+                    playState: (value.room as any).playState,
+                    name: (value.room as any).name,
+                },
+            };
+        });
+    }
+    // tslint:enable:no-any
 }

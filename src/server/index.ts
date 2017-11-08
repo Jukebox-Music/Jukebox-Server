@@ -10,18 +10,18 @@ export class SocketServer {
     private roomManager: RoomManager;
 
     constructor(private io: SocketIO.Server, private songDictionary: SongDictionary) {
-        this.roomManager = new RoomManager(this.io.sockets.adapter.rooms);
+        this.roomManager = new RoomManager(this.io.sockets.adapter.rooms, this.io);
     }
 
     public start(): void {
         this.io.on("connection", (socket: JukeboxSocket) => {
             logger.info(`User ${socket.client.id} connected`);
-            socket.emit("rooms", this.roomManager.Rooms);
+            socket.emit("rooms", this.roomManager.JsonRooms);
 
             const chat = new ChatServer(this.io);
             chat.init(socket);
 
-            const song = new SongServer(this.io, this.songDictionary, this.roomManager);
+            const song = new SongServer(this.songDictionary, this.roomManager);
             song.init(socket);
 
             const user = new UserServer();
@@ -30,17 +30,13 @@ export class SocketServer {
             socket.on("leave", () => {
                 logger.info(`User ${socket.client.id} left`);
                 socket.leaveAll();
-                this.sendUpdateToAllRooms();
+                this.roomManager.emitToAll();
             });
 
             socket.on("disconnect", (data) => {
                 logger.info(`User ${socket.client.id} disconnected. Destroying all services assigned to this user`);
-                this.sendUpdateToAllRooms();
+                this.roomManager.emitToAll();
             });
         });
-    }
-
-    private sendUpdateToAllRooms(): void {
-        this.io.emit("rooms", this.roomManager.Rooms);
     }
 }
