@@ -81,8 +81,7 @@ export class RoomManager {
                 sockets: value.sockets,
                 length: value.length,
                 room: {
-                    songs: (value.room as any).songs,
-                    playState: (value.room as any).playState,
+                    songs: (value.room as any).songs.slice(0, 3),
                     name: (value.room as any).name,
                 },
             };

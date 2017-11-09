@@ -48,6 +48,7 @@ export class Room {
             songs: this.songs,
             playState: this.playState,
             name: this.name,
+            totalUsers: this.TotalUsers,
         });
     }
 
@@ -82,6 +83,10 @@ export class Room {
 
     private get CurrentSong(): Song {
         return this.songs[0];
+    }
+
+    private get TotalUsers(): number {
+        return this.io.sockets.adapter.rooms[this.name].length;
     }
 
 }
