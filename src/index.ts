@@ -1,3 +1,4 @@
+import * as cors from "cors";
 import * as logger from "winston";
 
 import { SearchRouter } from "./api/search";
@@ -27,6 +28,7 @@ const appWrapper = new ApplicationWrapper(config);
 const songDictionary = new SongDictionary();
 
 appWrapper.configure((app) => {
+    app.use(cors());
     logger.debug("Configuring application routes");
     app.use("/search", new SearchRouter(config).router);
     app.use("/song", new SongRouter(config, songDictionary).router);
