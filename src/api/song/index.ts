@@ -30,7 +30,7 @@ export class SongRouter {
             const pully = new Pully();
 
             pully.download({
-                url: "https://www.youtube.com/watch?v=ukn6K64C3MI",
+                url: "https://www.youtube.com/watch?v=VfnYmGSE1aY",
                 preset: Presets.MP3,
             }).then((results) => {
                 res.status(200).download(results.path, "song.mp3");

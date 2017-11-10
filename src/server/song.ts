@@ -39,8 +39,11 @@ export class SongServer {
         });
 
         socket.on("song-state", (data: SongState) => {
-
             this.roomManager.updateState(currentRoomName, data);
+            this.roomManager.emitUpdate(currentRoomName);
+        });
+
+        socket.on("disconnect", (data) => {
             this.roomManager.emitUpdate(currentRoomName);
         });
     }

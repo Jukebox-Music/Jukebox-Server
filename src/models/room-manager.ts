@@ -63,6 +63,10 @@ export class RoomManager {
     }
 
     private getRoom(roomName: string): Room {
+        if (!this.Rooms[roomName]) {
+            return undefined;
+        }
+
         return this.Rooms[roomName].room as Room;
     }
 
