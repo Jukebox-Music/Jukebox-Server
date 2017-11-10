@@ -27,12 +27,6 @@ export class SocketServer {
             const user = new UserServer();
             user.init(socket);
 
-            socket.on("leave", () => {
-                logger.info(`User ${socket.client.id} left`);
-                socket.leaveAll();
-                this.roomManager.emitToAll();
-            });
-
             socket.on("disconnect", (data) => {
                 logger.info(`User ${socket.client.id} disconnected. Destroying all services assigned to this user`);
                 this.roomManager.emitToAll();
