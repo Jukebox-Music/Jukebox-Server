@@ -38,6 +38,16 @@ export class RoomManager {
         room.addSong(new Song(data, id, data.duration));
     }
 
+    public reOrderSong(roomName: string, index: number, newIndex: number): void {
+        const room = this.getRoom(roomName);
+
+        if (!room) {
+            return;
+        }
+
+        room.reOrderSong(index, newIndex);
+    }
+
     public updateState(roomName: string, state: SongState): void {
         const room = this.getRoom(roomName);
 

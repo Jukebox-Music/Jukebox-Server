@@ -56,6 +56,12 @@ export class Room {
         // TODO
     }
 
+    public reOrderSong(index: number, newIndex: number): void {
+        const song = this.songs.splice(index, 1)[0];
+
+        this.songs.splice(newIndex, 0, song);
+    }
+
     public nextSong(): void {
         this.songs.shift();
 

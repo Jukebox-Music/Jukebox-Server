@@ -43,6 +43,11 @@ export class SongServer {
             this.roomManager.emitUpdate(currentRoomName);
         });
 
+        socket.on("song-order", (data: SongOrder) => {
+            this.roomManager.reOrderSong(currentRoomName, data.oldIndex, data.newIndex);
+            this.roomManager.emitUpdate(currentRoomName);
+        });
+
         socket.on("disconnect", (data) => {
             this.roomManager.emitUpdate(currentRoomName);
         });
