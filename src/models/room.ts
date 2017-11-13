@@ -2,11 +2,13 @@ import { Song } from "./song";
 
 export class Room {
     private songs: Song[];
+    private history: Song[];
     private playState: PlayState;
     private timer: NodeJS.Timer;
 
     constructor(private name: string, private io: SocketIO.Server) {
         this.songs = [];
+        this.history = [];
         this.playState = "pause";
     }
 
@@ -46,6 +48,7 @@ export class Room {
     public emitUpdate(): void {
         this.io.in(this.name).emit("room", {
             songs: this.songs,
+            history: this.history,
             playState: this.playState,
             name: this.name,
             totalUsers: this.TotalUsers,
@@ -63,7 +66,8 @@ export class Room {
     }
 
     public nextSong(): void {
-        this.songs.shift();
+        const song = this.songs.shift();
+        this.history.unshift(song);
 
         if (this.songs.length === 0) {
             this.playState = "pause";
